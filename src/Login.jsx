@@ -4,18 +4,25 @@ import { Kimai } from "./kimai";
 export default function Login() {
   const [url, setUrl] = createSignal("https://");
   const [password, setPassword] = createSignal("");
+  const [message, setMessage] = createSignal("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     Kimai.setApiKey(password());
     Kimai.setJsonApi(url());
-    location.reload();
+
+    if (await Kimai.ping()) {
+      location.reload();
+    }
+
+    setMessage("Wrong URL or Key");
   };
 
   return (
     <div class="flex items-center justify-center h-screen bg-base-100">
       <div class="w-full max-w-md p-8 space-y-3 bg-base-200 rounded-lg shadow-md">
         <h2 class="text-2xl font-bold text-center">Login</h2>
+        <h3 class="text-xl font-bold text-center text-error">{message()}</h3>
         <form onSubmit={handleSubmit} class="space-y-4">
           <div>
             <label class="block mb-1 text-sm font-medium text-gray-700">

@@ -23,6 +23,19 @@ export const Kimai = {
   },
 
   /**
+   * Checks if User is authorize and api available
+   *
+   */
+  ping: async function () {
+    const res = await this._doApiCall("GET", "ping");
+    if (res == undefined) return false;
+
+    if (res.message == "pong") return true;
+
+    return false;
+  },
+
+  /**
    * Retrieve a list  project objects.
    *
    * @return array
@@ -134,6 +147,10 @@ export const Kimai = {
       }
 
       const response = await fetch(this.jsonApi + "/" + route, config);
+
+      if (response.status == 401) {
+        localStorage.setItem("apiKey", null);
+      }
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
