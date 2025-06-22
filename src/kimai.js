@@ -1,3 +1,40 @@
+const KimaiCache = {
+  getProjects: async function () {
+    if (this._projects != undefined) return this._projects;
+
+    const array = await Kimai.getProjects();
+
+    const map = {};
+
+    array.forEach((element) => {
+      map[element.id] = element;
+    });
+
+    this._customers = map;
+
+    return map;
+  },
+  getTasks: async function () {},
+  getCustomers: async function () {
+    if (this._customers != undefined) return this._customers;
+
+    const array = await Kimai.getCustomers();
+
+    const map = {};
+
+    array.forEach((element) => {
+      map[element.id] = element;
+    });
+
+    this._customers = map;
+
+    return map;
+  },
+
+  _projects: undefined,
+  _customers: undefined,
+};
+
 export const Kimai = {
   apiKey: localStorage.getItem("apiKey"),
   jsonApi: localStorage.getItem("apiUrl"),
@@ -84,6 +121,22 @@ export const Kimai = {
   },
 
   /**
+   * Returns a list of all timesheets
+   *
+   * @return array
+   */
+  getTimesheets: async function (options) {
+    return await this._doApiCall(
+      "GET",
+      "timesheets" +
+        (options != undefined
+          ? "?" + new URLSearchParams(options).toString()
+          : ""),
+      null,
+    );
+  },
+
+  /**
    * Returns null if no record is processing or an array if one is running.
    *
    * @return null|array
@@ -123,6 +176,8 @@ export const Kimai = {
   stop: async function (taskId) {
     return this._doApiCall("GET", "timesheets/" + taskId + "/stop", null);
   },
+
+  cache: KimaiCache,
 
   /**
    * Calls the JSON Api method and returns the result.

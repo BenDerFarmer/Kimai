@@ -36,7 +36,7 @@ export function Dock() {
             ></line>
           </g>
         </svg>
-        <span class="dock-label">Home</span>
+        <span class="dock-label">Start</span>
       </button>
 
       <button class="dock-active">
@@ -68,7 +68,7 @@ export function Dock() {
             ></rect>
           </g>
         </svg>
-        <span class="dock-label">Inbox</span>
+        <span class="dock-label">Zeiten</span>
       </button>
 
       <button>
@@ -98,7 +98,7 @@ export function Dock() {
             ></path>
           </g>
         </svg>
-        <span class="dock-label">Settings</span>
+        <span class="dock-label">Einstellung</span>
       </button>
     </div>
   );

@@ -1,20 +1,34 @@
-import { createSignal } from "solid-js";
+import { createSignal, onMount } from "solid-js";
 import { Kimai } from "../kimai";
 import { openTimeSheetModal } from "./TimeSheetModal";
 
+const [isRecording, setIsRecording] = createSignal(false);
+const [actives, setActives] = createSignal([]);
+
+export async function checkRecording() {
+  setActives(await Kimai.getActiveTimesheets());
+
+  setIsRecording(actives().length > 0);
+}
+
 export function StartStopButton() {
-  const [isRecording, setIsRecording] = createSignal(false);
+  onMount(async () => {
+    checkRecording();
+  });
 
   return (
     <button
       onClick={() => {
         if (isRecording()) {
+          actives().forEach(async (timesheet) => {
+            Kimai.stop(timesheet.id);
+          });
+          setIsRecording(false);
         } else {
           openTimeSheetModal();
         }
-
-        setIsRecording(!isRecording());
       }}
+      aria-label="Start or Stop Timesheet"
       class={"btn font-bold " + (isRecording() ? "btn-error" : "btn-success")}
     >
       {isRecording() ? <StopIcon /> : <StartIcon />}

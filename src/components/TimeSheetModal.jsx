@@ -1,6 +1,7 @@
 const timeSheetModalID = "timesheet_modal";
 import { createSignal, onMount } from "solid-js";
 import { Kimai } from "../kimai";
+import { checkRecording } from "./StartStopButton";
 
 export function TimeSheetModal() {
   const [fromDate, setFromDate] = createSignal("");
@@ -193,5 +194,6 @@ export function openTimeSheetModal() {
 }
 
 export function closeTimeSheetModal() {
+  checkRecording();
   document.getElementById(timeSheetModalID).close("");
 }

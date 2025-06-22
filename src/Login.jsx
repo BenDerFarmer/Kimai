@@ -13,6 +13,7 @@ export default function Login() {
 
     if (await Kimai.ping()) {
       location.reload();
+      return;
     }
 
     setMessage("Wrong URL or Key");
