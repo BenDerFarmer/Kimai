@@ -2,17 +2,40 @@ const timeSheetModalID = "timesheet_modal";
 import { createSignal, onMount } from "solid-js";
 import { Kimai } from "../kimai";
 import { checkRecording } from "./StartStopButton";
+import { refrechTimeSheets } from "../TimeSheets";
+
+export const [fromDate, setFromDate] = createSignal("");
+export const [duration, setDuration] = createSignal("");
+export const [endTime, setEndTime] = createSignal("");
+export const [project, setProject] = createSignal("");
+export const [activity, setActivity] = createSignal("");
+export const [desc, setDesc] = createSignal("");
+export const [tags, setTags] = createSignal("");
+export const [id, setId] = createSignal(undefined);
+
+export function openTimeSheetModal() {
+  document.getElementById(timeSheetModalID).showModal();
+}
+
+export function closeTimeSheetModal() {
+  checkRecording();
+  resetModal();
+  document.getElementById(timeSheetModalID).close("");
+}
+
+export function resetModal() {
+  setFromDate("");
+  setDuration("");
+  setEndTime("");
+  console.log(endTime());
+  setProject("");
+  setActivity("");
+  setDesc("");
+  setTags("");
+  setId("");
+}
 
 export function TimeSheetModal() {
-  const [fromDate, setFromDate] = createSignal("");
-  const [fromTime, setFromTime] = createSignal("");
-  const [duration, setDuration] = createSignal("");
-  const [endTime, setEndTime] = createSignal("");
-  const [project, setProject] = createSignal("");
-  const [activity, setActivity] = createSignal("");
-  const [desc, setDesc] = createSignal("");
-  const [tags, setTags] = createSignal("");
-
   const [activitys, setActivitys] = createSignal([]);
   const [projects, setProjects] = createSignal([]);
   const [customers, setCustomers] = createSignal([]);
@@ -32,13 +55,39 @@ export function TimeSheetModal() {
     );
   };
 
+  const selectFromDate = (e) => {
+    setFromDate(e.currentTarget.value);
+
+    setEndTime("");
+  };
+
+  const selectEndTime = (e) => {
+    if (e.currentTarget.value == "") return;
+
+    const time = e.currentTarget.value.split(":");
+    const date = fromDate();
+
+    const newDate = new Date(date != "" ? date : Date.now());
+    newDate.setHours(time[0], time[1]);
+  };
+
   const saveTimesheet = async () => {
     const options = {
       description: desc(),
     };
 
+    if (fromDate() != "") {
+      options["begin"] = fromDate();
+    }
+
+    if (endTime() != "") {
+      options["end"] = endTime();
+    }
+
     await Kimai.start(project(), activity(), options);
+    refrechTimeSheets();
     closeTimeSheetModal();
+    resetModal();
   };
 
   return (
@@ -47,26 +96,15 @@ export function TimeSheetModal() {
         <h3 class="font-bold text-lg mb-4">Zeit erfassen</h3>
 
         <div class="grid grid-cols-2 gap-4">
-          <div class="form-control">
+          <div class="form-control col-span-2">
             <label class="label">
               <span class="label-text">Von</span>
             </label>
             <input
-              type="date"
+              type="datetime-local"
               class="input input-bordered w-full"
               value={fromDate()}
-              onInput={(e) => setFromDate(e.currentTarget.value)}
-            />
-          </div>
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">&nbsp;</span>
-            </label>
-            <input
-              type="time"
-              class="input input-bordered w-full"
-              value={fromTime()}
-              onInput={(e) => setFromTime(e.currentTarget.value)}
+              onInput={(e) => selectFromDate(e)}
             />
           </div>
 
@@ -91,7 +129,7 @@ export function TimeSheetModal() {
               type="time"
               class="input input-bordered w-full"
               value={endTime()}
-              onInput={(e) => setEndTime(e.currentTarget.value)}
+              onInput={(e) => selectEndTime(e)}
             />
           </div>
 
@@ -187,13 +225,4 @@ export function TimeSheetModal() {
       </div>
     </dialog>
   );
-}
-
-export function openTimeSheetModal() {
-  document.getElementById(timeSheetModalID).showModal();
-}
-
-export function closeTimeSheetModal() {
-  checkRecording();
-  document.getElementById(timeSheetModalID).close("");
 }

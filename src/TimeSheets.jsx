@@ -1,8 +1,14 @@
 import { createSignal, onMount, Show } from "solid-js";
 import { Kimai } from "./kimai";
+import { openTimeSheetModal } from "./components/TimeSheetModal";
+
+const [timesheets, setTimesheets] = createSignal([]);
+
+export async function refrechTimeSheets() {
+  setTimesheets(await Kimai.getTimesheets());
+}
 
 export function TimeSheets() {
-  const [timesheets, setTimesheets] = createSignal([]);
   const [projects, setProjects] = createSignal([]);
 
   onMount(async () => {
@@ -40,17 +46,22 @@ export function TimeSheets() {
         >
           {timeTitle(beginDate)}
         </Show>
-        <li class="list-row">
+        <li
+          class="list-row"
+          onClick={() => {
+            openTimeSheetModal();
+          }}
+        >
           <div>
             <div>
-              {new Date(ts.begin).toLocaleTimeString([], {
+              {new Date(ts.end).toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
                 hour12: false,
               })}
             </div>
             <div>
-              {new Date(ts.end).toLocaleTimeString([], {
+              {new Date(ts.begin).toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
                 hour12: false,

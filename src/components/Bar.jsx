@@ -51,6 +51,7 @@ export function Bar() {
           class="drawer-overlay"
         ></label>
         <ul class="menu bg-base-200 min-h-full w-60 p-4">
+          <h2 class="btn btn-ghost text-xl">Menu</h2>
           <div class="divider">Zeiterfassung</div>
           <li>
             <a>Zeiten</a>
