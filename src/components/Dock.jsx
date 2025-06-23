@@ -98,7 +98,14 @@ export function Dock() {
             ></path>
           </g>
         </svg>
-        <span class="dock-label">Einstellung</span>
+        <span
+          class="dock-label"
+          onClick={() => {
+            localStorage.setItem("apiKey", null);
+          }}
+        >
+          Einstellung
+        </span>
       </button>
     </div>
   );

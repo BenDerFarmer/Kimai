@@ -4,14 +4,14 @@ import { Kimai } from "../kimai";
 import { checkRecording } from "./StartStopButton";
 import { refrechTimeSheets } from "../TimeSheets";
 
-export const [fromDate, setFromDate] = createSignal("");
-export const [duration, setDuration] = createSignal("");
-export const [endTime, setEndTime] = createSignal("");
-export const [project, setProject] = createSignal("");
-export const [activity, setActivity] = createSignal("");
-export const [desc, setDesc] = createSignal("");
-export const [tags, setTags] = createSignal("");
-export const [id, setId] = createSignal(undefined);
+export const [fromDate, setFromDate] = createSignal(null);
+export const [duration, setDuration] = createSignal(null);
+export const [endTime, setEndTime] = createSignal(null);
+export const [project, setProject] = createSignal(null);
+export const [activity, setActivity] = createSignal(null);
+export const [desc, setDesc] = createSignal(null);
+export const [tags, setTags] = createSignal(null);
+export const [id, setId] = createSignal(null);
 
 export function openTimeSheetModal() {
   document.getElementById(timeSheetModalID).showModal();
@@ -24,15 +24,14 @@ export function closeTimeSheetModal() {
 }
 
 export function resetModal() {
-  setFromDate("");
-  setDuration("");
-  setEndTime("");
-  console.log(endTime());
-  setProject("");
-  setActivity("");
-  setDesc("");
-  setTags("");
-  setId("");
+  setFromDate(null);
+  setDuration(null);
+  setEndTime(null);
+  setProject(null);
+  setActivity(null);
+  setDesc(null);
+  setTags(null);
+  setId(null);
 }
 
 export function TimeSheetModal() {
@@ -55,33 +54,23 @@ export function TimeSheetModal() {
     );
   };
 
-  const selectFromDate = (e) => {
-    setFromDate(e.currentTarget.value);
-
-    setEndTime("");
-  };
-
-  const selectEndTime = (e) => {
-    if (e.currentTarget.value == "") return;
-
-    const time = e.currentTarget.value.split(":");
-    const date = fromDate();
-
-    const newDate = new Date(date != "" ? date : Date.now());
-    newDate.setHours(time[0], time[1]);
-  };
-
   const saveTimesheet = async () => {
     const options = {
       description: desc(),
     };
 
-    if (fromDate() != "") {
+    if (fromDate() != null) {
       options["begin"] = fromDate();
     }
 
-    if (endTime() != "") {
-      options["end"] = endTime();
+    if (endTime() != null) {
+      const time = endTime().split(":");
+      const date = fromDate();
+
+      const newDate = new Date(date != "" ? date : Date.now());
+      newDate.setHours(time[0], time[1]);
+
+      options["end"] = newDate;
     }
 
     await Kimai.start(project(), activity(), options);
@@ -104,7 +93,7 @@ export function TimeSheetModal() {
               type="datetime-local"
               class="input input-bordered w-full"
               value={fromDate()}
-              onInput={(e) => selectFromDate(e)}
+              onInput={(e) => setFromDate(e.currentTarget.value)}
             />
           </div>
 
@@ -129,7 +118,7 @@ export function TimeSheetModal() {
               type="time"
               class="input input-bordered w-full"
               value={endTime()}
-              onInput={(e) => selectEndTime(e)}
+              onInput={(e) => setEndTime(e.currentTarget.value)}
             />
           </div>
 
