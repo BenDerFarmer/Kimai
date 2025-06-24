@@ -71,7 +71,11 @@ export function Dock() {
         <span class="dock-label">Zeiten</span>
       </button>
 
-      <button>
+      <button
+        onClick={() => {
+          localStorage.setItem("apiKey", null);
+        }}
+      >
         <svg
           class="size-[1.2em]"
           xmlns="http://www.w3.org/2000/svg"
@@ -98,14 +102,7 @@ export function Dock() {
             ></path>
           </g>
         </svg>
-        <span
-          class="dock-label"
-          onClick={() => {
-            localStorage.setItem("apiKey", null);
-          }}
-        >
-          Einstellung
-        </span>
+        <span class="dock-label">Einstellung</span>
       </button>
     </div>
   );
