@@ -1,6 +1,6 @@
 import { createSignal, onMount, Show } from "solid-js";
 import { Kimai } from "./kimai";
-import { openTimeSheetModal } from "./components/TimeSheetModal";
+import { openTimeSheetModal } from "./lib/timesheet";
 
 const [timesheets, setTimesheets] = createSignal([]);
 
@@ -49,7 +49,14 @@ export function TimeSheets() {
         <li
           class="list-row"
           onClick={() => {
-            openTimeSheetModal();
+            openTimeSheetModal({
+              begin: ts.begin,
+              end: ts.end,
+              id: ts.id,
+              project: ts.project,
+              activity: ts.activity,
+              desc: ts.description,
+            });
           }}
         >
           <div>

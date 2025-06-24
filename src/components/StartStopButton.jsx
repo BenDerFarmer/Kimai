@@ -1,6 +1,6 @@
 import { createSignal, onMount } from "solid-js";
 import { Kimai } from "../kimai";
-import { openTimeSheetModal } from "./TimeSheetModal";
+import { openTimeSheetModal } from "../lib/timesheet";
 
 const [isRecording, setIsRecording] = createSignal(false);
 const [actives, setActives] = createSignal([]);
