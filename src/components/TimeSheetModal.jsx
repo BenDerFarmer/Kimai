@@ -1,4 +1,4 @@
-import { createSignal, onMount } from "solid-js";
+import { createSignal, onMount, createEffect } from "solid-js";
 import { Kimai } from "../kimai";
 import {
   beginDate,
@@ -29,6 +29,47 @@ export function TimeSheetModal() {
   onMount(async () => {
     setActivitys(await Kimai.getTasks());
     setCustomers(await Kimai.getCustomers());
+  });
+
+  const selectDuration = (e) => {
+    if (duration() == null) return;
+
+    const startDate = new Date(beginDate());
+    const durationSplit = e.currentTarget.value.split(":");
+
+    startDate.setHours(
+      startDate.getHours() + parseInt(durationSplit[0]),
+      startDate.getMinutes() + parseInt(durationSplit[1]),
+    );
+
+    if (startDate.getHours() == NaN) return;
+
+    setEndTime(
+      startDate.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      }),
+    );
+  };
+
+  createEffect(() => {
+    if (endTime() == null) return;
+
+    const startDate = new Date(beginDate());
+    const endTimeSplit = endTime().split(":");
+
+    let hour = endTimeSplit[0] - startDate.getHours();
+    let minute = endTimeSplit[1] - startDate.getMinutes();
+
+    if (minute < 0) {
+      minute = 60 + minute;
+      hour--;
+    }
+
+    if (hour == NaN) return;
+
+    setDuration(`${hour}:${minute}`);
   });
 
   const selectCustomer = async (e) => {
@@ -68,7 +109,7 @@ export function TimeSheetModal() {
               placeholder="0:00"
               class="input input-bordered w-full"
               value={duration()}
-              onInput={(e) => setDuration(e.currentTarget.value)}
+              onChange={(e) => selectDuration(e)}
             />
           </div>
           <div class="form-control">
