@@ -28,7 +28,7 @@ export async function saveTimesheet() {
 
   if (endTime() != null) {
     const time = endTime().split(":");
-    const date = fromDate();
+    const date = beginDate();
 
     const newDate = new Date(date != "" ? date : Date.now());
     newDate.setHours(time[0], time[1]);
@@ -36,7 +36,12 @@ export async function saveTimesheet() {
     options["end"] = newDate;
   }
 
-  await Kimai.start(project(), activity(), options);
+  if (id()) {
+    await Kimai.updateTimeSheet(id(), project(), activity(), options);
+  } else {
+    await Kimai.start(project(), activity(), options);
+  }
+
   refrechTimeSheets();
   closeTimeSheetModal();
   resetModal();

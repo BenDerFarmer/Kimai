@@ -168,6 +168,22 @@ export const Kimai = {
   },
 
   /**
+   * updates a Timesheet
+   *
+   * @param integer timeSheetID
+   * @param integer prjId
+   * @param integer taskId
+   * @return boolean
+   */
+  updateTimeSheet: async function (timeSheetID, prjId, taskId, options) {
+    return this._doApiCall("PATCH", "timesheets/" + timeSheetID, {
+      project: prjId,
+      activity: taskId,
+      ...options,
+    });
+  },
+
+  /**
    * Stops the current running task.
    * @param integer taskOd
    *
