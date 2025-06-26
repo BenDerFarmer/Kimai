@@ -1,7 +1,13 @@
+import { A, useLocation } from "@solidjs/router";
+import { createMemo } from "solid-js";
+
 export function Dock() {
+  const location = useLocation();
+  const pathname = createMemo(() => location.pathname);
+
   return (
     <div class="dock dock-lg">
-      <button>
+      <A href="/" class={pathname() == "/" ? "dock-active" : ""}>
         <svg
           class="size-[1.2em]"
           xmlns="http://www.w3.org/2000/svg"
@@ -37,9 +43,9 @@ export function Dock() {
           </g>
         </svg>
         <span class="dock-label">Start</span>
-      </button>
+      </A>
 
-      <button class="dock-active">
+      <A class={pathname() == "/test" ? "dock-active" : ""} href="/test">
         <svg
           class="size-[1.2em]"
           xmlns="http://www.w3.org/2000/svg"
@@ -69,12 +75,11 @@ export function Dock() {
           </g>
         </svg>
         <span class="dock-label">Zeiten</span>
-      </button>
+      </A>
 
-      <button
-        onClick={() => {
-          localStorage.setItem("apiKey", null);
-        }}
+      <A
+        href="/settings"
+        class={pathname() == "/settings" ? "dock-active" : ""}
       >
         <svg
           class="size-[1.2em]"
@@ -103,7 +108,7 @@ export function Dock() {
           </g>
         </svg>
         <span class="dock-label">Einstellung</span>
-      </button>
+      </A>
     </div>
   );
 }

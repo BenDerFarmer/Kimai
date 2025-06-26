@@ -66,7 +66,7 @@ export function TimeSheetModal() {
       hour--;
     }
 
-    if (hour == NaN) return;
+    if (isNaN(hour)) return;
 
     setDuration(`${hour}:${minute}`);
   });

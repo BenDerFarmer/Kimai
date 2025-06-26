@@ -1,6 +1,6 @@
 import { checkRecording } from "../components/StartStopButton";
 import { Kimai } from "../kimai";
-import { refrechTimeSheets } from "../TimeSheets";
+import { refrechTimeSheets } from "../pages/TimeSheets";
 import { createSignal } from "solid-js";
 
 export const timeSheetModalID = "timesheet_modal";

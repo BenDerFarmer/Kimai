@@ -1,10 +1,15 @@
 /* @refresh reload */
+import "./index.css";
 import { render } from "solid-js/web";
 import { Kimai } from "./kimai";
+import { Route, HashRouter } from "@solidjs/router";
 
-import "./index.css";
-import Dashboard from "./Dashboard";
-import Login from "./Login";
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
+import { Dock } from "./components/Dock";
+import { Bar } from "./components/Bar";
+import { TimeSheetModal } from "./components/TimeSheetModal";
+import { Settings } from "./Settings";
 
 const root = document.getElementById("root");
 
@@ -14,8 +19,32 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
   );
 }
 
+const theme = localStorage.getItem("theme");
+if (theme != null) {
+  document.documentElement.setAttribute("data-theme", theme);
+}
+
+const Layout = (props) => {
+  return (
+    <>
+      <Bar />
+      <TimeSheetModal />
+      {props.children}
+      <Dock />
+    </>
+  );
+};
+
 if (Kimai.apiKey == null || Kimai.jsonApi == null) {
   render(() => <Login />, root);
 } else {
-  render(() => <Dashboard />, root);
+  render(
+    () => (
+      <HashRouter root={Layout}>
+        <Route path="/" component={Dashboard} />
+        <Route path="/settings" component={Settings} />
+      </HashRouter>
+    ),
+    root,
+  );
 }

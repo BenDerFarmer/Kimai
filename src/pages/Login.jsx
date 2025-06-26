@@ -1,5 +1,5 @@
 import { createSignal } from "solid-js";
-import { Kimai } from "./kimai";
+import { Kimai } from "../kimai";
 
 export default function Login() {
   const [url, setUrl] = createSignal("https://");

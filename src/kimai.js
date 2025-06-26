@@ -59,6 +59,11 @@ export const Kimai = {
     this.apiKey = key;
   },
 
+  logout: function () {
+    localStorage.removeItem("apiKey");
+    localStorage.removeItem("apiUrl");
+  },
+
   /**
    * Checks if User is authorize and api available
    *
@@ -70,6 +75,10 @@ export const Kimai = {
     if (res.message == "pong") return true;
 
     return false;
+  },
+
+  getCurrentUser: async function () {
+    return await this._doApiCall("GET", "users/me", null);
   },
 
   /**

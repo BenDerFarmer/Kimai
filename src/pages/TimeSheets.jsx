@@ -1,6 +1,6 @@
 import { createSignal, onMount, Show } from "solid-js";
-import { Kimai } from "./kimai";
-import { openTimeSheetModal } from "./lib/timesheet";
+import { Kimai } from "../kimai";
+import { openTimeSheetModal } from "../lib/timesheet";
 
 const [timesheets, setTimesheets] = createSignal([]);
 
@@ -34,6 +34,8 @@ export function TimeSheets() {
 
   const timeSheetElement = (ts) => {
     const beginDate = new Date(ts.begin.split("T")[0]);
+
+    const project = projects()[ts.project];
     return (
       <>
         <Show
@@ -76,9 +78,9 @@ export function TimeSheets() {
             </div>
           </div>
           <div>
-            <div>{projects()[ts.project].parentTitle}</div>
+            <div>{project != undefined ? project.parentTitle : "Loading"}</div>
             <div class="text-xs uppercase font-semibold opacity-60">
-              {projects()[ts.project].name}
+              {project != undefined ? project.name : "Loading"}
             </div>
           </div>
           <button class="btn btn-square btn-ghost">
