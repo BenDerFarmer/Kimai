@@ -72,6 +72,9 @@ export function Bar() {
           <li>
             <a>Tätigkeiten</a>
           </li>
+          <li>
+            <a>Schlagwörter</a>
+          </li>
         </ul>
       </div>
     </div>

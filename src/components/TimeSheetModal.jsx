@@ -32,18 +32,16 @@ export function TimeSheetModal() {
     setCustomers(await Kimai.getCustomers());
   });
 
-  const selectDuration = (e) => {
-    if (duration() == null) return;
-
+  const selectDuration = (value) => {
     const startDate = new Date(beginDate());
-    const durationSplit = e.currentTarget.value.split(":");
+    const durationSplit = value.split(":");
 
     startDate.setHours(
       startDate.getHours() + parseInt(durationSplit[0]),
       startDate.getMinutes() + parseInt(durationSplit[1]),
     );
 
-    if (startDate.getHours() == NaN) return;
+    if (isNaN(startDate.getHours())) return;
 
     setEndTime(
       startDate.toLocaleTimeString([], {
@@ -101,17 +99,42 @@ export function TimeSheetModal() {
             />
           </div>
 
-          <div class="form-control">
+          <div class="form-control dropdown">
             <label class="label">
               <span class="label-text">Dauer</span>
             </label>
             <input
               type="text"
               placeholder="0:00"
+              tabindex="0"
+              role="button"
               class="input input-bordered w-full"
               value={duration()}
-              onChange={(e) => selectDuration(e)}
+              onChange={(e) => selectDuration(e.currentTarget.value)}
             />
+            <ul
+              tabindex="0"
+              class="dropdown-content menu bg-base-100 rounded-box z-1 w-64 p-2 shadow-sm"
+            >
+              <For each={[1, 2, 3, 4]}>
+                {(hour, _) => (
+                  <li class="flex flex-row">
+                    <a onClick={() => selectDuration(hour + ":00")}>
+                      {hour + ":00"}
+                    </a>
+                    <a onClick={() => selectDuration(hour + ":15")}>
+                      {hour + ":15"}
+                    </a>
+                    <a onClick={() => selectDuration(hour + ":30")}>
+                      {hour + ":30"}
+                    </a>
+                    <a onClick={() => selectDuration(hour + ":45")}>
+                      {hour + ":45"}
+                    </a>
+                  </li>
+                )}
+              </For>
+            </ul>
           </div>
           <div class="form-control">
             <label class="label">
