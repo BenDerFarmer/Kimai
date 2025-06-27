@@ -59,7 +59,13 @@ function Themes() {
               class="radio radio-sm theme-controller"
               value={theme.value}
               checked={localStorage.getItem("theme") == theme.value}
-              onClick={() => localStorage.setItem("theme", theme.value)}
+              onClick={() => {
+                localStorage.setItem("theme", theme.value);
+                document.documentElement.setAttribute(
+                  "data-theme",
+                  theme.value,
+                );
+              }}
             />
             {theme.name}
           </label>
