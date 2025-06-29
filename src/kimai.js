@@ -97,6 +97,26 @@ export const Kimai = {
     );
   },
 
+  getProject: async function (id) {
+    return await this._doApiCall("GET", "projects/" + id, null);
+  },
+
+  createProject: async function (name, customer, options) {
+    return this._doApiCall("POST", "projects", {
+      name: name,
+      customer: customer,
+      ...options,
+    });
+  },
+
+  updateProject: async function (id, name, customer, options) {
+    return this._doApiCall("PATCH", "projects/" + id, {
+      name: name,
+      customer: customer,
+      ...options,
+    });
+  },
+
   /**
    * Returns a list of all tasks for the current user.
    *
