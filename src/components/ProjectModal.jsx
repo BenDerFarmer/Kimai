@@ -42,11 +42,11 @@ export async function saveProject() {
   };
 
   if (beginDate() != null) {
-    options["start"] = beginDate();
+    options["start"] = beginDate() + "T00:00:00Z";
   }
 
   if (endDate() != null) {
-    options["end"] = endDate();
+    options["end"] = endDate() + "T00:00:00Z";
   }
 
   if (id()) {
