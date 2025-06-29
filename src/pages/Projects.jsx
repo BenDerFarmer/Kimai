@@ -6,7 +6,7 @@ export function Projects() {
   const [projects, setProjects] = createSignal([]);
 
   onMount(async () => {
-    setProjects(await Kimai.getProjects());
+    setProjects(await Kimai.getProjects({ ignoreDates: 1 }));
   });
 
   return (
@@ -15,7 +15,9 @@ export function Projects() {
         {(project, _) => (
           <li class="list-row flex justify-between items-center ">
             <div>
-              <div> {project.name}</div>
+              <div class={project.end != null ? "text-warning" : ""}>
+                {project.name}
+              </div>
               <div class="text-xs uppercase font-semibold opacity-60">
                 {project.parentTitle}
               </div>

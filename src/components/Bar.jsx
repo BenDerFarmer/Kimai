@@ -65,13 +65,13 @@ export function Bar() {
           </li>
           <div class="divider">Administration</div>
           <li>
-            <A href="projects">Prokte</A>
+            <A href="projects">Projekte</A>
           </li>
           <li>
             <A href="customers">Kunden</A>
           </li>
           <li>
-            <a>Tätigkeiten</a>
+            <A href="activities">Tätigkeiten</A>
           </li>
           <li>
             <a>Schlagwörter</a>
