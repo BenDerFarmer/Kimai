@@ -1,3 +1,4 @@
+import { A } from "@solidjs/router";
 import { StartStopButton } from "./StartStopButton";
 
 export function Bar() {
@@ -67,7 +68,7 @@ export function Bar() {
             <a>Projekte</a>
           </li>
           <li>
-            <a>Kunden</a>
+            <A href="customers">Kunden</A>
           </li>
           <li>
             <a>Tätigkeiten</a>

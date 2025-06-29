@@ -10,6 +10,8 @@ import { Dock } from "./components/Dock";
 import { Bar } from "./components/Bar";
 import { TimeSheetModal } from "./components/TimeSheetModal";
 import { Settings } from "./Settings";
+import { Customers } from "./pages/Customers";
+import { ErrorModal } from "./components/ErrorModal";
 
 const root = document.getElementById("root");
 
@@ -29,6 +31,7 @@ const Layout = (props) => {
     <>
       <Bar />
       <TimeSheetModal />
+      <ErrorModal />
       {props.children}
       <Dock />
     </>
@@ -43,6 +46,7 @@ if (Kimai.apiKey == null || Kimai.jsonApi == null) {
       <HashRouter root={Layout}>
         <Route path="/" component={Dashboard} />
         <Route path="/settings" component={Settings} />
+        <Route path="/customers" component={Customers} />
       </HashRouter>
     ),
     root,

@@ -114,6 +114,23 @@ export const Kimai = {
   },
 
   /**
+   * Returns the customer by id
+   *
+   * @return object
+   */
+  getCustomer: async function (id, options) {
+    return await this._doApiCall(
+      "GET",
+      "customers/" +
+        id +
+        (options != undefined
+          ? "?" + new URLSearchParams(options).toString()
+          : ""),
+      null,
+    );
+  },
+
+  /**
    * Returns a list of all tasks for the current user.
    *
    * @return array
