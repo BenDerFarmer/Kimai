@@ -2,7 +2,7 @@ const KimaiCache = {
   getProjects: async function () {
     if (this._projects != undefined) return this._projects;
 
-    const array = await Kimai.getProjects();
+    const array = await Kimai.getProjects({ ignoreDates: 1 });
 
     const map = {};
 

@@ -1,12 +1,13 @@
-import { createSignal, onMount, Show } from "solid-js";
+import { createEffect, createSignal, onMount, Show } from "solid-js";
 import { Kimai } from "../kimai";
 import { openTimeSheetModal } from "../lib/timesheet";
 import { OptionsIcon } from "../components/Icons";
 
 const [timesheets, setTimesheets] = createSignal([]);
+const [page, setPage] = createSignal(1);
 
 export async function refrechTimeSheets() {
-  setTimesheets(await Kimai.getTimesheets());
+  setTimesheets(await Kimai.getTimesheets({ page: page() }));
 }
 
 export function TimeSheets() {
@@ -14,7 +15,7 @@ export function TimeSheets() {
 
   onMount(async () => {
     setProjects(await Kimai.cache.getProjects());
-    setTimesheets(await Kimai.getTimesheets());
+    setTimesheets(await Kimai.getTimesheets({ page: page() }));
   });
 
   let lastDate = undefined;
@@ -95,6 +96,29 @@ export function TimeSheets() {
   return (
     <ul class="list bg-base-100 rounded-box shadow-md pb-16">
       <For each={timesheets()}>{(ts) => timeSheetElement(ts)}</For>
+
+      <li class="bg-base-300 p-4 text-xs opacity-60 tracking-wide join flex justify-center">
+        <button
+          class="join-item btn"
+          onClick={() => {
+            if (page() == 1) return;
+            setPage(page() - 1);
+            refrechTimeSheets();
+          }}
+        >
+          «
+        </button>
+        <button class="join-item btn">Seite {page()}</button>
+        <button
+          class="join-item btn"
+          onClick={() => {
+            setPage(page() + 1);
+            refrechTimeSheets();
+          }}
+        >
+          »
+        </button>
+      </li>
     </ul>
   );
 }
