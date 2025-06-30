@@ -16,6 +16,7 @@ import {
   setDesc,
   tags,
   setTags,
+  id,
   projects,
   setProjects,
   timeSheetModalID,
@@ -72,11 +73,12 @@ export function TimeSheetModal() {
   });
 
   const selectCustomer = async (e) => {
-    const id = e.currentTarget.value;
+    const cust_id = e.currentTarget.value;
 
     setProjects(
       await Kimai.getProjects({
-        customer: id,
+        customer: cust_id,
+        ignoreDates: id() != null ? 1 : null,
       }),
     );
   };

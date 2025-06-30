@@ -74,6 +74,7 @@ export async function openTimeSheetModal(options) {
       setProjects(
         await Kimai.getProjects({
           customer: customer,
+          ignoreDates: id() != null ? 1 : null,
         }),
       );
 
