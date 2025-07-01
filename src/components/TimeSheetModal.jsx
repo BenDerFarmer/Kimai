@@ -78,7 +78,7 @@ export function TimeSheetModal() {
     setProjects(
       await Kimai.getProjects({
         customer: cust_id,
-        ignoreDates: id() != null ? 1 : null,
+        ignoreDates: 1,
       }),
     );
   };
