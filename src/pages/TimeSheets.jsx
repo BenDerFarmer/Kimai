@@ -15,7 +15,7 @@ export function TimeSheets() {
 
   onMount(async () => {
     setProjects(await Kimai.cache.getProjects());
-    setTimesheets(await Kimai.getTimesheets({ page: page() }));
+    refrechTimeSheets();
   });
 
   let lastDate = undefined;
@@ -50,19 +50,7 @@ export function TimeSheets() {
         >
           {timeTitle(beginDate)}
         </Show>
-        <li
-          class="list-row"
-          onClick={() => {
-            openTimeSheetModal({
-              begin: ts.begin,
-              end: ts.end,
-              id: ts.id,
-              project: ts.project,
-              activity: ts.activity,
-              desc: ts.description,
-            });
-          }}
-        >
+        <li class="list-row">
           <div>
             <div>
               {new Date(ts.end).toLocaleTimeString([], {
@@ -79,15 +67,59 @@ export function TimeSheets() {
               })}
             </div>
           </div>
-          <div>
+          <div
+            onClick={() => {
+              openTimeSheetModal({
+                begin: ts.begin,
+                end: ts.end,
+                id: ts.id,
+                project: ts.project,
+                activity: ts.activity,
+                desc: ts.description,
+              });
+            }}
+          >
             <div>{project != undefined ? project.parentTitle : "Loading"}</div>
             <div class="text-xs uppercase font-semibold opacity-60">
               {project != undefined ? project.name : "Loading"}
             </div>
           </div>
-          <button class="btn btn-square btn-ghost">
-            <OptionsIcon />
-          </button>
+          <div class="dropdown dropdown-end">
+            <div tabindex="0" role="button" class="btn btn-square btn-ghost">
+              <OptionsIcon />
+            </div>
+            <ul
+              tabindex="0"
+              class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
+            >
+              <li>
+                <a
+                  onClick={() => {
+                    openTimeSheetModal({
+                      begin: ts.begin,
+                      end: ts.end,
+                      project: ts.project,
+                      activity: ts.activity,
+                      desc: ts.description,
+                    });
+                  }}
+                >
+                  Duplizieren
+                </a>
+              </li>
+              <li>
+                <a
+                  onClick={async () => {
+                    await Kimai.deleteTimeSheet(ts.id);
+                    refrechTimeSheets();
+                  }}
+                  class="text-error"
+                >
+                  Löschen
+                </a>
+              </li>
+            </ul>
+          </div>
         </li>
       </>
     );

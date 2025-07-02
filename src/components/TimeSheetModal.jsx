@@ -73,14 +73,15 @@ export function TimeSheetModal() {
   });
 
   const selectCustomer = async (e) => {
-    const cust_id = e.currentTarget.value;
+    const options = {
+      customer: e.currentTarget.value,
+    };
 
-    setProjects(
-      await Kimai.getProjects({
-        customer: cust_id,
-        ignoreDates: id() != null ? 1 : null,
-      }),
-    );
+    if (id() != null) {
+      options.ignoreDates = 1;
+    }
+
+    setProjects(await Kimai.getProjects(options));
   };
 
   return (

@@ -71,13 +71,15 @@ export async function openTimeSheetModal(options) {
         .customer;
       setCustomer(customer);
 
-      setProjects(
-        await Kimai.getProjects({
-          customer: customer,
-          ignoreDates: id() != null ? 1 : null,
-        }),
-      );
+      const data = {
+        customer: customer,
+      };
 
+      if (id() != null) {
+        data.ignoreDates = 1;
+      }
+
+      setProjects(await Kimai.getProjects(data));
       setProject(options["project"]);
     }
   }

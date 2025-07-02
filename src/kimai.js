@@ -229,6 +229,10 @@ export const Kimai = {
     });
   },
 
+  deleteTimeSheet: async function (timeSheetID) {
+    return this._doApiCall("DELETE", "timesheets/" + timeSheetID, null);
+  },
+
   /**
    * Stops the current running task.
    * @param integer taskOd
@@ -271,6 +275,10 @@ export const Kimai = {
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
+      }
+
+      if (response.status == 204) {
+        return;
       }
 
       const data = await response.json();
