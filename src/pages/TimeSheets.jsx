@@ -1,7 +1,8 @@
-import { createEffect, createSignal, onMount, Show } from "solid-js";
+import { createSignal, onMount, Show } from "solid-js";
 import { Kimai } from "../kimai";
 import { openTimeSheetModal } from "../lib/timesheet";
 import { OptionsIcon } from "../components/Icons";
+import { ConfirmModal, openConfirmModal } from "../components/ConfirmModal";
 
 const [timesheets, setTimesheets] = createSignal([]);
 const [page, setPage] = createSignal(1);
@@ -109,9 +110,14 @@ export function TimeSheets() {
               </li>
               <li>
                 <a
-                  onClick={async () => {
-                    await Kimai.deleteTimeSheet(ts.id);
-                    refrechTimeSheets();
+                  onClick={() => {
+                    openConfirmModal(
+                      "Möchtest du diesen Eintrag löschen?",
+                      async () => {
+                        await Kimai.deleteTimeSheet(ts.id);
+                        refrechTimeSheets();
+                      },
+                    );
                   }}
                   class="text-error"
                 >
@@ -126,31 +132,34 @@ export function TimeSheets() {
   };
 
   return (
-    <ul class="list bg-base-100 rounded-box shadow-md pb-16">
-      <For each={timesheets()}>{(ts) => timeSheetElement(ts)}</For>
+    <>
+      <ConfirmModal />
+      <ul class="list bg-base-100 rounded-box shadow-md pb-16">
+        <For each={timesheets()}>{(ts) => timeSheetElement(ts)}</For>
 
-      <li class="bg-base-300 p-4 text-xs opacity-60 tracking-wide join flex justify-center">
-        <button
-          class="join-item btn"
-          onClick={() => {
-            if (page() == 1) return;
-            setPage(page() - 1);
-            refrechTimeSheets();
-          }}
-        >
-          «
-        </button>
-        <button class="join-item btn">Seite {page()}</button>
-        <button
-          class="join-item btn"
-          onClick={() => {
-            setPage(page() + 1);
-            refrechTimeSheets();
-          }}
-        >
-          »
-        </button>
-      </li>
-    </ul>
+        <li class="bg-base-300 p-4 text-xs opacity-60 tracking-wide join flex justify-center">
+          <button
+            class="join-item btn"
+            onClick={() => {
+              if (page() == 1) return;
+              setPage(page() - 1);
+              refrechTimeSheets();
+            }}
+          >
+            «
+          </button>
+          <button class="join-item btn">Seite {page()}</button>
+          <button
+            class="join-item btn"
+            onClick={() => {
+              setPage(page() + 1);
+              refrechTimeSheets();
+            }}
+          >
+            »
+          </button>
+        </li>
+      </ul>
+    </>
   );
 }
