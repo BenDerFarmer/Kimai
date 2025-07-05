@@ -15,9 +15,18 @@ import {
 
 export function Customers() {
   const [customers, setCustomers] = createSignal([]);
+  const [term, setTerm] = createSignal("");
+
+  async function refreshCustomers() {
+    setCustomers(
+      await Kimai.getCustomers({
+        term: term(),
+      }),
+    );
+  }
 
   onMount(async () => {
-    setCustomers(await Kimai.getCustomers());
+    refreshCustomers();
   });
 
   return (
@@ -30,13 +39,10 @@ export function Customers() {
             <label class="input">
               <SearchIcon />
               <input
-                onChange={async (e) =>
-                  setCustomers(
-                    await Kimai.getCustomers({
-                      term: e.currentTarget.value,
-                    }),
-                  )
-                }
+                onChange={async (e) => {
+                  setTerm(e.currentTarget.value);
+                  refreshCustomers();
+                }}
                 type="search"
                 class="grow"
                 placeholder="Suchen"
@@ -112,7 +118,7 @@ export function Customers() {
                             "Möchtest du diesen Kunden löschen?",
                             async () => {
                               await Kimai.deleteCustomer(customer.id);
-                              setCustomers(await Kimai.getCustomers());
+                              refreshCustomers();
                             },
                           );
                         }}
