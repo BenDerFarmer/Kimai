@@ -150,6 +150,37 @@ export const Kimai = {
     );
   },
 
+  createCustomer: async function (name, country, currency, timezone, options) {
+    return this._doApiCall("POST", "customers", {
+      name: name,
+      country: country,
+      currency: currency,
+      timezone: timezone,
+      ...options,
+    });
+  },
+
+  updateCustomer: async function (
+    id,
+    name,
+    country,
+    currency,
+    timezone,
+    options,
+  ) {
+    return this._doApiCall("PATCH", "customers/" + id, {
+      name: name,
+      country: country,
+      currency: currency,
+      timezone: timezone,
+      ...options,
+    });
+  },
+
+  deleteCustomer: async function (customerID) {
+    return this._doApiCall("DELETE", "customers/" + customerID, null);
+  },
+
   /**
    * Returns a list of all tasks for the current user.
    *

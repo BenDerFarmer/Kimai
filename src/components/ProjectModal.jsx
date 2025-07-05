@@ -80,7 +80,7 @@ export function ProjectModal() {
               onInput={(e) => setName(e.currentTarget.value)}
               type="text"
               placeholder=""
-              class="input"
+              class="input w-full"
             />
           </div>
 

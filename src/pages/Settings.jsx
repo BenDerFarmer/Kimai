@@ -1,5 +1,5 @@
 import { createSignal, onMount } from "solid-js";
-import { Kimai } from "./kimai";
+import { Kimai } from "../kimai";
 
 export function Settings() {
   const [user, setUser] = createSignal(null);

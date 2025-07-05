@@ -9,7 +9,7 @@ import Login from "./pages/Login";
 import { Dock } from "./components/Dock";
 import { Bar } from "./components/Bar";
 import { TimeSheetModal } from "./components/TimeSheetModal";
-import { Settings } from "./Settings";
+import { Settings } from "./pages/Settings";
 import { Customers } from "./pages/Customers";
 import { ErrorModal } from "./components/ErrorModal";
 import { Projects } from "./pages/Projects";
