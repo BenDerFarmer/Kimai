@@ -45,7 +45,10 @@ export function Dock() {
         <span class="dock-label">Start</span>
       </A>
 
-      <A class={pathname() == "/test" ? "dock-active" : ""} href="/test">
+      <A
+        class={pathname() == "/timesheets" ? "dock-active" : ""}
+        href="/timesheets"
+      >
         <svg
           class="size-[1.2em]"
           xmlns="http://www.w3.org/2000/svg"

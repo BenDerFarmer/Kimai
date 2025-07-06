@@ -14,6 +14,7 @@ import { Customers } from "./pages/Customers";
 import { ErrorModal } from "./components/ErrorModal";
 import { Projects } from "./pages/Projects";
 import { Activities } from "./pages/Activities";
+import { TimeSheets } from "./pages/TimeSheets";
 
 const root = document.getElementById("root");
 
@@ -47,6 +48,7 @@ if (Kimai.apiKey == null || Kimai.jsonApi == null) {
     () => (
       <HashRouter root={Layout}>
         <Route path="/" component={Dashboard} />
+        <Route path="/timesheets" component={TimeSheets} />
         <Route path="/settings" component={Settings} />
         <Route path="/customers" component={Customers} />
         <Route path="/projects" component={Projects} />

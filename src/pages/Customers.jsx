@@ -34,8 +34,7 @@ export function Customers() {
       <CustomerModal />
       <ul class="list bg-base-100 rounded-box shadow-md">
         <li class="bg-base-300 p-4 pb-2 text-xs opacity-85 tracking-wide flex justify-between">
-          <div class="flex">
-            <button class="btn">Filter</button>
+          <div class="flex w-full">
             <label class="input">
               <SearchIcon />
               <input
@@ -49,12 +48,7 @@ export function Customers() {
               />
             </label>
           </div>
-          <button
-            onClick={() => {
-              openCustomerModal();
-            }}
-            class="btn btn-success"
-          >
+          <button onClick={() => openCustomerModal()} class="btn btn-success">
             +
           </button>
         </li>
