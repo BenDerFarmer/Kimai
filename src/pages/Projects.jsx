@@ -18,13 +18,18 @@ const sortEndDate = (a, b) => {
   return 0;
 };
 
-export function Projects() {
-  const [projects, setProjects] = createSignal([]);
+const [projects, setProjects] = createSignal([]);
 
-  onMount(async () => {
+export async function reloadProjectsPage() {
     const project = await Kimai.getProjects({ ignoreDates: 1 });
     project.sort(sortEndDate);
     setProjects(project);
+}
+
+export function Projects() {
+
+  onMount(() => {
+    reloadProjectsPage()
   });
 
   return (
