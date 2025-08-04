@@ -40,7 +40,8 @@ export async function loadProject(id) {
 export async function saveProject() {
   const options = {
     comment: desc(),
-    visible: true
+    visible: true,
+    globalActivities: true,
   };
 
   if (beginDate() != null) {
