@@ -1,8 +1,12 @@
 import { createSignal, onMount, Show } from "solid-js";
 import { Kimai } from "../kimai";
 import { openTimeSheetModal } from "../lib/timesheet";
-import { OptionsIcon } from "../components/Icons";
+import { OptionsIcon, OptionsHIcon } from "../components/Icons";
 import { ConfirmModal, openConfirmModal } from "../components/ConfirmModal";
+import {
+  SelectDateModal,
+  openSelectDateModal,
+} from "../components/SelectDateModal";
 
 const [timesheets, setTimesheets] = createSignal([]);
 const [page, setPage] = createSignal(1);
@@ -29,8 +33,89 @@ export function TimeSheets() {
     const week = Math.ceil(((beginDate - dt) / 86400000 + dt.getDay() + 1) / 7);
 
     return (
-      <li class="bg-base-300 p-4 pb-2 text-xs opacity-60 tracking-wide">
-        {beginDate.toDateString() + " KW: " + week}
+      <li class="bg-base-200 p-4 pb-2 text-xs tracking-wide flex justify-between h-9 items-center">
+        <h2 class="opacity-60">{beginDate.toDateString() + " KW: " + week}</h2>
+        <div class="dropdown dropdown-end w-12 h-12">
+          <div tabindex="0" role="button" class="btn btn-square btn-ghost">
+            <OptionsHIcon />
+          </div>
+          <ul
+            tabindex="0"
+            class="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 shadow-sm"
+          >
+            <li>
+              <a
+                onClick={async () => {
+                  openSelectDateModal(
+                    "Wähle ein datum",
+                    "zu den der Tag kopiert werden soll.",
+                    async (dateInput) => {
+                      const iso = beginDate.toISOString().substring(0, 19);
+
+                      const timesheets = await Kimai.getTimesheets({
+                        begin: iso,
+                        end: iso.substring(0, 11) + "23:59:59",
+                      });
+
+                      const date = new Date(dateInput)
+                        .toISOString()
+                        .split("T")[0];
+
+                      const startPromises = timesheets.map((element) => {
+                        const begin = `${date}T${element.begin.split("T")[1]}`;
+                        const end = `${date}T${element.end.split("T")[1]}`;
+
+                        return Kimai.start(element.project, element.activity, {
+                          description: element.description,
+                          begin,
+                          end,
+                        });
+                      });
+
+                      await Promise.all(startPromises);
+
+                      refrechTimeSheets();
+                    },
+                  );
+                }}
+              >
+                Duplizieren
+              </a>
+            </li>
+            <li>
+              <a
+                onClick={() => {
+                  openConfirmModal(
+                    "Möchtest du diesen Tag löschen?",
+                    async () => {
+                      const iso = beginDate.toISOString().substring(0, 19);
+
+                      const timesheets = await Kimai.getTimesheets({
+                        begin: iso,
+                        end: iso.substring(0, 11) + "23:59:59",
+                      });
+
+                      timesheets.forEach(async (element) => {});
+
+                      refrechTimeSheets();
+
+                      const promises = timesheets.map((element) => {
+                        return Kimai.deleteTimeSheet(element.id);
+                      });
+
+                      await Promise.all(promises);
+
+                      refrechTimeSheets();
+                    },
+                  );
+                }}
+                class="text-error"
+              >
+                Löschen
+              </a>
+            </li>
+          </ul>
+        </div>
       </li>
     );
   };
@@ -97,6 +182,17 @@ export function TimeSheets() {
                 <a
                   onClick={() => {
                     openTimeSheetModal({
+                      begin: ts.end,
+                    });
+                  }}
+                >
+                  Danach
+                </a>
+              </li>
+              <li>
+                <a
+                  onClick={() => {
+                    openTimeSheetModal({
                       begin: ts.begin,
                       end: ts.end,
                       project: ts.project,
@@ -133,6 +229,7 @@ export function TimeSheets() {
 
   return (
     <>
+      <SelectDateModal />
       <ConfirmModal />
       <ul class="list bg-base-100 rounded-box shadow-md pb-16">
         <For each={timesheets()}>{(ts) => timeSheetElement(ts)}</For>

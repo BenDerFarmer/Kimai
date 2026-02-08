@@ -113,6 +113,9 @@ export const Kimai = {
     return this._doApiCall("PATCH", "projects/" + id, {
       name: name,
       customer: customer,
+      visible: true,
+      globalActivities: true,
+      billable: true,
       ...options,
     });
   },
@@ -156,6 +159,8 @@ export const Kimai = {
       country: country,
       currency: currency,
       timezone: timezone,
+      visible: true,
+      billable: true,
       ...options,
     });
   },

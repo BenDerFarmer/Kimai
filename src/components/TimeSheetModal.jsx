@@ -1,5 +1,6 @@
 import { createSignal, onMount, createEffect } from "solid-js";
 import { Kimai } from "../kimai";
+import { openCustomerModal } from "../components/CustomerModal.jsx";
 import {
   beginDate,
   setBeginDate,
@@ -73,8 +74,16 @@ export function TimeSheetModal() {
   });
 
   const selectCustomer = async (e) => {
+    const value = e.currentTarget.value;
+    if (value == "") return;
+
+    if (value == "new") {
+      //TODO
+      return;
+    }
+
     const options = {
-      customer: e.currentTarget.value,
+      customer: value,
     };
 
     if (id() != null) {
@@ -119,7 +128,7 @@ export function TimeSheetModal() {
               tabindex="0"
               class="dropdown-content menu bg-base-100 rounded-box z-1 w-64 p-2 shadow-sm"
             >
-              <For each={[1, 2, 3, 4]}>
+              <For each={[0, 1, 2, 3, 4]}>
                 {(hour, _) => (
                   <li class="flex flex-row">
                     <a onClick={() => selectDuration(hour + ":00")}>
@@ -163,6 +172,7 @@ export function TimeSheetModal() {
               onChange={(e) => selectCustomer(e)}
             >
               <option value="">– wähle –</option>
+              <option value="new">– neu –</option>
 
               <For each={customers()}>
                 {(cust, _) => <option value={cust.id}>{cust.name}</option>}
@@ -181,6 +191,7 @@ export function TimeSheetModal() {
               onChange={(e) => setProject(e.currentTarget.value)}
             >
               <option value="">– wähle –</option>
+              <option value="">– neu –</option>
 
               <For each={projects()}>
                 {(proj, _) => (
