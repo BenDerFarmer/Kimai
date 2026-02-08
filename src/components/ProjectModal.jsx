@@ -1,5 +1,6 @@
 import { createSignal, onMount } from "solid-js";
 import { Kimai } from "../kimai";
+import { reloadProjectsPage } from "../pages/Projects"
 
 const [name, setName] = createSignal(null);
 const [beginDate, setBeginDate] = createSignal(null);
@@ -39,6 +40,8 @@ export async function loadProject(id) {
 export async function saveProject() {
   const options = {
     comment: desc(),
+    visible: true,
+    globalActivities: true,
   };
 
   if (beginDate() != null) {
@@ -55,6 +58,7 @@ export async function saveProject() {
     await Kimai.createProject(name(), customer(), options);
   }
 
+  reloadProjectsPage()
   closeProjectModal();
 }
 
